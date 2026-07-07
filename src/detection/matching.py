@@ -24,6 +24,11 @@ _FAMILY = {
 }
 
 
+def pattern_family(pattern: str) -> str:
+    """Collapse spoofing and layering into one family; other patterns map to themselves."""
+    return _FAMILY[pattern]
+
+
 def label_hits(
     hits: pd.DataFrame, episodes: Iterable[GroundTruthEpisode]
 ) -> tuple[pd.DataFrame, pd.DataFrame]:

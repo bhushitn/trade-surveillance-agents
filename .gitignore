@@ -8,6 +8,7 @@ __pycache__/
 .ipynb_checkpoints/
 .DS_Store
 .env
+.local_state/
 node_modules/
 dist/
 build/

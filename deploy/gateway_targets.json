@@ -1,0 +1,87 @@
+{
+  "_readme": "OpenAPI target definitions for the AgentCore Gateway. Each target wraps one mock API from src/mockapis as MCP tools. docs/DEPLOYMENT.md shows how to host the APIs and register these targets with create_gateway_target.",
+  "targets": [
+    {
+      "name": "account-service",
+      "description": "Account profiles and surveillance alert history",
+      "openapi": {
+        "openapi": "3.0.3",
+        "info": { "title": "account-service", "version": "0.1.0" },
+        "servers": [{ "url": "https://REPLACE_ME.execute-api.us-east-1.amazonaws.com" }],
+        "paths": {
+          "/accounts/{account_id}/profile": {
+            "get": {
+              "operationId": "get_account_profile",
+              "summary": "Account type, risk rating, and tenure for an account",
+              "parameters": [
+                {
+                  "name": "account_id",
+                  "in": "path",
+                  "required": true,
+                  "schema": { "type": "string" }
+                }
+              ],
+              "responses": { "200": { "description": "Account profile" } }
+            }
+          },
+          "/accounts/{account_id}/alerts": {
+            "get": {
+              "operationId": "get_alert_history",
+              "summary": "Prior surveillance alerts for an account",
+              "parameters": [
+                {
+                  "name": "account_id",
+                  "in": "path",
+                  "required": true,
+                  "schema": { "type": "string" }
+                }
+              ],
+              "responses": { "200": { "description": "List of prior alerts" } }
+            }
+          }
+        }
+      }
+    },
+    {
+      "name": "market-reference",
+      "description": "Instrument reference data and related-instrument lookup",
+      "openapi": {
+        "openapi": "3.0.3",
+        "info": { "title": "market-reference", "version": "0.1.0" },
+        "servers": [{ "url": "https://REPLACE_ME.execute-api.us-east-1.amazonaws.com" }],
+        "paths": {
+          "/instruments/{symbol}": {
+            "get": {
+              "operationId": "get_instrument",
+              "summary": "Tick size, venue, and asset class for an instrument",
+              "parameters": [
+                {
+                  "name": "symbol",
+                  "in": "path",
+                  "required": true,
+                  "schema": { "type": "string" }
+                }
+              ],
+              "responses": { "200": { "description": "Instrument reference record" } }
+            }
+          },
+          "/instruments/{symbol}/related": {
+            "get": {
+              "operationId": "list_related",
+              "summary": "Instruments correlated with or derivative of the given symbol",
+              "parameters": [
+                {
+                  "name": "symbol",
+                  "in": "path",
+                  "required": true,
+                  "schema": { "type": "string" }
+                }
+              ],
+              "responses": { "200": { "description": "Related instruments" } }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

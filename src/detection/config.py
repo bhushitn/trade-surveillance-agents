@@ -42,3 +42,24 @@ class DetectionConfig:
     stuffing_min_burst_rate: int = 40
     stuffing_min_cancel_to_new_ratio: float = 0.9
     stuffing_max_median_latency_s: float = 0.2
+
+    @classmethod
+    def alerting(cls) -> DetectionConfig:
+        """Loosened first-stage thresholds that over-alert on purpose.
+
+        Production surveillance systems tune the first stage toward recall and
+        rely on downstream triage for precision. This preset feeds the agent
+        pipeline evaluation: the case graph re-verifies each alert with the
+        canonical thresholds above.
+        """
+        return cls(
+            spoof_max_median_cancel_latency_s=25.0,
+            min_impact_ticks=1.0,
+            max_reversion_ticks=-0.5,
+            wash_min_pair_trades=3,
+            wash_min_share=0.2,
+            wash_min_qty=500,
+            stuffing_min_burst_rate=20,
+            stuffing_min_cancel_to_new_ratio=0.7,
+            stuffing_max_median_latency_s=1.0,
+        )
