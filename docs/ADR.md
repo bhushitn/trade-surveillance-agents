@@ -28,7 +28,7 @@ The investigation workflow is fixed and known in advance: detect, contextualize,
 
 Swarm was rejected, not ignored. Swarm fits problems where the decomposition is unknown up front and emergent routing adds value (open-ended research, triage across unpredictable domains). This investigation has a known decomposition, and emergent routing is a liability in a compliance setting, not a feature.
 
-A conditional edge after the Pattern Detector short-circuits the graph when no detection threshold fires, so clean windows cost one agent invocation, not four.
+The graph runs once per detection alert, not per event window: the vectorized detection layer screens every window first, and clean windows never invoke an agent.
 
 Reference: [Strands Graph pattern](https://strandsagents.com/docs/user-guide/concepts/multi-agent/graph/), [Strands Swarm pattern](https://strandsagents.com/docs/user-guide/concepts/multi-agent/swarm/).
 
@@ -88,23 +88,23 @@ AgentCore currently ships thirteen services. This system uses five. Each row sta
 | Payments | No paid third-party APIs |
 | Registry | Organizational catalog for tool and agent discovery. This is a single repo, not a platform team |
 
-Deployment parity note: Strands agents are plain Python and run identically on a laptop and in Runtime; the deployment wrapper adds an entrypoint, not behavior. Local mode uses the same graph against dockerized mock APIs, with Memory and Identity swapped for local fakes behind an interface. This claim is a stated design property of the SDK and is re-verified in Phase 8 before the deployment docs assert it.
+Deployment parity note: Strands agents are plain Python and run identically on a laptop and in Runtime; the deployment wrapper adds an entrypoint, not behavior. Local mode uses the same graph against dockerized mock APIs, with Memory and Identity swapped for local fakes behind an interface. This held: the deployed entrypoint (`deploy/agent_runtime.py`) wraps the same graph construction the local pipeline uses and adds nothing else.
 
 ## Decision 5: Human approval is structural, not configurable
 
-No code path files, escalates, or transmits a case to any external party. The system's terminal output is a draft case in `pending_review` state. The only transitions out of that state (`approved`, `dismissed`, `edited`) require an authenticated human action through the reviewer API.
+No code path files, escalates, or transmits a case to any external party. The system's terminal output is a draft case in `pending_review` state. The only transitions out of that state (`approved`, `dismissed`, optionally with an edited narrative) require a human action through the reviewer API.
 
 This is enforced three ways, so removing it requires deliberate work in three places:
 
 1. Tool inventory: no filing or escalation tool is registered in Gateway or defined locally. The Gateway tool list is the auditable proof.
-2. Schema: `CaseMemo.status` has no auto-approved value; the state machine in the backend rejects transitions not attributable to a human principal.
+2. Schema: `CaseMemo` carries a recommendation, never a status; case status lives in the backend, starts at `pending`, and only the review endpoint can change it.
 3. Graph topology: the graph's terminal node is the Case Writer. There is no node after it.
 
 Rejected alternative: confidence-thresholded auto-escalation (file automatically above 0.95 confidence). The asymmetry of costs makes this wrong, not just risky: a false positive filed with a regulator causes concrete harm to a named account holder and to the venue's credibility, while a false negative held for human review costs analyst minutes. A confidence score from this system is a model output, not a legal judgment, and no threshold converts one into the other.
 
 ## Decision 6: Synthetic order-book data with injected ground truth
 
-A documented generator (`data/SYNTHETIC.md`) produces tick-level order and trade events with realistic microstructure (arrival processes, spread dynamics, cancellations) and injects spoofing, layering, wash-trading, and quote-stuffing episodes at known locations. The injection log is the answer key.
+A documented generator (`docs/SYNTHETIC.md`) produces tick-level order and trade events with realistic microstructure (arrival processes, spread dynamics, cancellations) and injects spoofing, layering, wash-trading, and quote-stuffing episodes at known locations. The injection log is the answer key.
 
 No verifiable public dataset labels real manipulation episodes at the order level. Real limit order book data exists (LOBSTER distributes NASDAQ book reconstructions for academic use) but carries no manipulation labels, and real enforcement cases do not come with tick data attached. Rather than train or evaluate against unlabeled real data and assert results that cannot be checked, the generator trades realism for a measurable answer key. This mirrors the standard practice in the surveillance literature, where injected patterns against a simulated book are the accepted evaluation method; a specific citation is deferred to `SYNTHETIC.md` and stated as "source unavailable" if none can be verified.
 
@@ -112,14 +112,14 @@ No real account identities, no live market connectivity, and no claim that synth
 
 ## Decision 7: Evaluation is in-repo and gates CI
 
-`eval/harness.py` runs the pipeline against a frozen synthetic dataset and reports precision, recall, and false positive rate with confidence intervals sized to the episode count. CI fails if either precision or recall regresses past a stated threshold against the committed baseline.
+`src/evaluation/harness.py` computes precision, recall, and false positive rate against the frozen synthetic dataset with Wilson confidence intervals sized to the episode count. CI fails if any metric regresses past the floors asserted in `tests/unit/test_detectors_ground_truth.py`.
 
-The harness runs in two configurations:
+The evaluation runs in two configurations:
 
-1. Pattern Detector alone (detection thresholds mapped directly to case severity).
-2. Full graph (Context Agent and Cross-Market Correlator contributing to the final severity call).
+1. Detection alone at canonical thresholds (single-stage surveillance).
+2. Two-stage surveillance: loosened alerting thresholds followed by the Pattern Detector's deterministic re-verification (replayed offline in `src/evaluation/replay.py` so the comparison needs no model access).
 
-The delta between them is the measured marginal value of the multi-agent design. If that delta is not positive and distinguishable from noise, the README reports that honestly and the architecture section explains what the extra agents buy instead (context quality in the memo, not detection lift). This comparison is the repository's central claim about itself and it is a number, not an assertion.
+The delta between them is the measured marginal value of the triage stage: precision 0.973 to 1.000 at unchanged 42/42 episode recall. The Context Agent and Cross-Market Correlator do not contribute detection lift and the README does not claim they do; what they buy is memo quality, which is why the memo contract requires every claim to cite a source field. This comparison is the repository's central claim about itself and it is a number, not an assertion.
 
 ## Consequences
 
