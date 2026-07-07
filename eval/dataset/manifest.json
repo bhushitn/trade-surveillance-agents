@@ -1,0 +1,59 @@
+{
+  "events_sha256": "e22b912a699db0e636aee412613fb595ed2e9ec291a3e922d91b8fb42fe28248",
+  "n_events": 263872,
+  "n_episodes": 42,
+  "episodes_by_pattern": {
+    "spoofing": 14,
+    "layering": 14,
+    "wash_trading": 8,
+    "quote_stuffing": 6
+  },
+  "session": {
+    "date": "2026-06-15",
+    "open": "09:30:00 America/New_York"
+  },
+  "config": {
+    "seed": 42,
+    "duration_s": 23400.0,
+    "n_accounts": 40,
+    "orders_per_second": 1.5,
+    "episodes": {
+      "spoofing": 12,
+      "layering": 10,
+      "wash_trading": 8,
+      "quote_stuffing": 6
+    },
+    "coordinated_fraction": 0.5,
+    "n_recidivists": 3,
+    "instruments": [
+      {
+        "symbol": "ALPH",
+        "venue": "XNYS",
+        "initial_price": 48.5,
+        "tick_size": 0.01,
+        "related": "ALPH-F"
+      },
+      {
+        "symbol": "ALPH-F",
+        "venue": "XCME",
+        "initial_price": 48.55,
+        "tick_size": 0.01,
+        "related": "ALPH"
+      },
+      {
+        "symbol": "BRVO",
+        "venue": "XNAS",
+        "initial_price": 132.2,
+        "tick_size": 0.01,
+        "related": null
+      },
+      {
+        "symbol": "CRUX",
+        "venue": "XNAS",
+        "initial_price": 21.75,
+        "tick_size": 0.01,
+        "related": null
+      }
+    ]
+  }
+}
