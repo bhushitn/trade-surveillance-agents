@@ -1,0 +1,3 @@
+# Notebooks are executed documentation, not the primary source language.
+# Excluding them from linguist reports Python as the repository language.
+*.ipynb linguist-documentation
