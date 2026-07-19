@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 640" width="1280" height="640" role="img" aria-label="Trade surveillance triage on synthetic order books. 42 of 42 episodes recalled, 0 false positives across 59,098 benign windows, alert precision 1.000 after triage.">
+  <rect width="1280" height="640" fill="#ffffff"/>
+  <rect width="1280" height="8" fill="#2a6fb0"/>
+
+  <text x="80" y="120" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="42" font-weight="700" fill="#14243a">Trade surveillance triage on synthetic order books</text>
+  <text x="80" y="164" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="21" font-weight="400" fill="#5b6b7f">Detects spoofing, layering, wash trading, and quote stuffing, then drafts case memos for a human reviewer.</text>
+
+  <!-- separators -->
+  <line x1="430" y1="300" x2="430" y2="470" stroke="#e3e8ee" stroke-width="1.5"/>
+  <line x1="830" y1="300" x2="830" y2="470" stroke="#e3e8ee" stroke-width="1.5"/>
+
+  <!-- tile 1 -->
+  <text x="255" y="395" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="#2a6fb0">42 / 42</text>
+  <text x="255" y="432" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" fill="#5b6b7f">manipulation episodes recalled</text>
+
+  <!-- tile 2 -->
+  <text x="630" y="395" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="#2a6fb0">0</text>
+  <text x="630" y="432" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" fill="#5b6b7f">false positives in 59,098 benign windows</text>
+
+  <!-- tile 3 -->
+  <text x="1015" y="395" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="66" font-weight="700" fill="#2a6fb0">1.000</text>
+  <text x="1015" y="432" text-anchor="middle" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="19" fill="#5b6b7f">alert precision after triage (from 0.973)</text>
+
+  <text x="80" y="588" font-family="-apple-system, Segoe UI, Helvetica, Arial, sans-serif" font-size="17" fill="#8a97a6">Strands Agents and Bedrock AgentCore   ·   synthetic frozen dataset   ·   the system files nothing</text>
+</svg>
